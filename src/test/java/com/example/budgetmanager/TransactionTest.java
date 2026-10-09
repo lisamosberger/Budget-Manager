@@ -26,7 +26,7 @@ class TransactionTest {
         assertEquals(amount, transaction.amount());
         assertEquals(type, transaction.type());
 
-
     }
+
 
 }
