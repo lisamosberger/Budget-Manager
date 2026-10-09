@@ -5,3 +5,6 @@ Project Plan - Budget Manager
 - [ ] Create Transaction record
 - [ ] Create TransactionType enum 
 - [ ] Test creating income and expense transaction 
+- [ ] Create Repository <T>
+- [ ] ArrayList<> to store the object
+- 
