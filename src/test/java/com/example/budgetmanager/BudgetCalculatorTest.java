@@ -48,4 +48,13 @@ class BudgetCalculatorTest {
         assertEquals(1400, result);
     }
 
+    @Test
+    @DisplayName("If adding nothing to Expenses should return Zero")
+    void ifAddingNothingToExpensesShouldReturnZero(){
+        Repository<Transaction> repository = new Repository<>();
+        BudgetCalculator calculator = new BudgetCalculator();
+        double result = calculator.calculateExpense(repository);
+        assertEquals(0, result);
+    }
+
 }
