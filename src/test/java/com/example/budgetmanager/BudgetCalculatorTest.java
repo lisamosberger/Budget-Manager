@@ -9,17 +9,17 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 
 class BudgetCalculatorTest {
+    Repository<Transaction> repository = new Repository<>();
+    BudgetCalculator calculator = new BudgetCalculator();
 
     @Test
     @DisplayName("If adding an income total Income should increase.")
     void ifAddingAnIncomeTotalIncomeShouldIncrease(){
-        Repository<Transaction> repository = new Repository<>();
 
         repository.add(new Transaction(LocalDate.of(2026,10,13),
                 "Salary", 2000.0, TransactionType.INCOME));
         repository.add(new Transaction(LocalDate.of(2026,10,13),
                 "Presents", 300.0, TransactionType.INCOME));
-        BudgetCalculator calculator = new BudgetCalculator();
         double result = calculator.calculateIncome(repository);
         assertEquals(2300, result);
     }
@@ -27,8 +27,6 @@ class BudgetCalculatorTest {
     @Test
     @DisplayName("If adding nothing to income shoult return zero")
     void ifAddingNothingToIncomeShouldReturnZero () {
-        Repository<Transaction> repository = new Repository<>();
-        BudgetCalculator calculator = new BudgetCalculator();
         double result = calculator.calculateIncome(repository);
         assertEquals(0, result);
 
@@ -37,12 +35,10 @@ class BudgetCalculatorTest {
     @Test
     @DisplayName("If adding something to Expense total expense should Increase")
     void idAddingSomethingToExpenseTotalExpenseShouldIncrease (){
-        Repository<Transaction> repository = new Repository<>();
         repository.add(new Transaction (LocalDate.of(2026,10,13),
                 "Food",
                 1400.0,
                 TransactionType.EXPENSE));
-        BudgetCalculator calculator = new BudgetCalculator();
 
         double result = calculator.calculateExpense(repository);
         assertEquals(1400, result);
@@ -51,10 +47,39 @@ class BudgetCalculatorTest {
     @Test
     @DisplayName("If adding nothing to Expenses should return Zero")
     void ifAddingNothingToExpensesShouldReturnZero(){
-        Repository<Transaction> repository = new Repository<>();
-        BudgetCalculator calculator = new BudgetCalculator();
+
         double result = calculator.calculateExpense(repository);
         assertEquals(0, result);
+    }
+
+    @Test
+    @DisplayName("Calculating the balance between Expense and Income")
+    void IfAddingIncomeAndExpenseShouldGiveDifferenceBetweenThem(){
+        repository.add(new Transaction (LocalDate.of(2026,10,13),
+                "Food",
+                1500.0,
+                TransactionType.EXPENSE));
+        repository.add((new Transaction(LocalDate.of(2026,10,13),
+                "Income",
+                1800.0,
+                TransactionType.INCOME)));
+        double result = calculator.calculateBalance(repository);
+        assertEquals(300.0, result);
+    }
+
+    @Test
+    @DisplayName("If expense > than income should go into negative balance")
+    void ifExpenseIsGreaterThanIncomeShouldReturnNegativeNumber(){
+        repository.add(new Transaction(LocalDate.of(2026,10,13),
+                "Food",
+                1500.0,
+                TransactionType.EXPENSE));
+        repository.add((new Transaction(LocalDate.of(2026,10,13),
+                "Salary",
+                1200.0,
+                TransactionType.INCOME)));
+        double result = calculator.calculateBalance(repository);
+        assertEquals(-300.0, result);
     }
 
 }

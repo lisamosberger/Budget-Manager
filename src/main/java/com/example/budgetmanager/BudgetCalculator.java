@@ -2,7 +2,7 @@ package com.example.budgetmanager;
 
 public class BudgetCalculator {
 
-    //ToDO: Write a Test for it!
+
     public double calculateIncome(Repository<Transaction> repository) {
         double totalIncome = 0;
 
@@ -12,7 +12,7 @@ public class BudgetCalculator {
         }
         return totalIncome;
     }
-    //ToDo: Write a test for it!
+
     public double calculateExpense(Repository<Transaction> repository) {
         double totalExpense = 0;
         for (Transaction transaction: repository.findAll()){
@@ -22,4 +22,8 @@ public class BudgetCalculator {
         return totalExpense;
     }
 
+    public double calculateBalance(Repository<Transaction> repository) {
+        double amount = calculateIncome(repository) - calculateExpense(repository);
+        return amount;
+    }
 }
