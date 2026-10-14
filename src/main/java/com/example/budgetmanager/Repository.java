@@ -24,4 +24,8 @@ public class Repository <T> {
         }
         return result;
     }
+
+    public boolean contains(T item) {
+        return items.contains(item);
+    }
 }
