@@ -31,6 +31,7 @@ while (running) {
             IO.println("Goodbye");
         }
         default -> IO.println("Thats not an option!");
+
     }
 }
     }
@@ -48,9 +49,14 @@ while (running) {
                 return;
             }
         }
+        IO.println("Choose a Category " +
+                "\n=======================================");
+        categories.findAll().forEach(c -> IO.println(c));
 
         String category = IO.readln("Enter Category: ");
-        categoryExists();
+        if (!categories.findAll().contains(category)){
+            IO.println("This category doesn't exists, please choose another one!");
+        }
 
         double amount = Double.parseDouble(IO.readln("Enter the amount (SEK): "));
 
@@ -69,7 +75,7 @@ while (running) {
             return;
         }
 
-        if (categories.contains(category)) {
+        if (categories.findAll().contains(category)) {
             IO.println("Category already exists!");
             return;
         }
@@ -79,12 +85,13 @@ while (running) {
 
     }
 
-    void categoryExists() {
-
-    }
 
     void showAllTransactions(){
 
+        IO.println("Every Transaction made " +
+                "\n===================================");
+
+        transactions.findAll().forEach(t->IO.println(t));
     }
 
     void showBalance(){
