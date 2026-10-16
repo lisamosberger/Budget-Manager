@@ -8,8 +8,9 @@ public class CliApp {
     Repository<String> categories = new Repository<>();
     BudgetCalculator budgetCalculator = new BudgetCalculator();
 
+    boolean running = true;
     void main (){
-        boolean running = true;
+
 while (running) {
     IO.println("\tBudget Planer" +
             "\n=======================================" +
@@ -27,14 +28,20 @@ while (running) {
         case "3" -> showAllTransactions();
         case "4" -> showBalance();
         case "5" -> saveToFile();
-        case "e" -> {
-            running = false;
-            IO.println("Goodbye");
-        }
+        case "e" -> exit();
         default -> IO.println("Thats not an option!");
-
     }
+
+    if(!running) {
+        break;
+    }
+    IO.readln("Press any key to contrinue...");
 }
+    }
+
+    void exit () {
+        running = false;
+        IO.println("Goodbye!");
     }
 
     void addTransaction(){
