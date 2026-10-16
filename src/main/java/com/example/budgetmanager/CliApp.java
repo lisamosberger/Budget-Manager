@@ -6,6 +6,7 @@ import java.util.Locale;
 public class CliApp {
     Repository<Transaction> transactions = new Repository<>();
     Repository<String> categories = new Repository<>();
+    BudgetCalculator budgetCalculator = new BudgetCalculator();
 
     void main (){
         boolean running = true;
@@ -56,6 +57,7 @@ while (running) {
         String category = IO.readln("Enter Category: ");
         if (!categories.findAll().contains(category)){
             IO.println("This category doesn't exists, please choose another one!");
+            return;
         }
 
         double amount = Double.parseDouble(IO.readln("Enter the amount (SEK): "));
@@ -95,6 +97,10 @@ while (running) {
     }
 
     void showBalance(){
+        IO.println("Your current balance is at "
+                + budgetCalculator.calculateBalance(transactions)
+                + "\nYour Total Income is at " + budgetCalculator.calculateIncome(transactions)
+                + "\nYour Total Expense is at " + budgetCalculator.calculateExpense(transactions));
 
     }
 
