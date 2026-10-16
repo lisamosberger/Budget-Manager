@@ -62,6 +62,24 @@ while (running) {
     }
 
     void createCategory(){
+        String category = IO.readln("Enter new category: ");
+
+        if (category.isEmpty()) {
+            IO.println("Category can not be empty!");
+            return;
+        }
+
+        if (categories.contains(category)) {
+            IO.println("Category already exists!");
+            return;
+        }
+
+        categories.add(category);
+        IO.println("Category has succesfully created!");
+
+    }
+
+    void categoryExists() {
 
     }
 
