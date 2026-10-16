@@ -79,21 +79,26 @@ while (running) {
     void createCategory(){
         String category = IO.readln("Enter new category: ");
 
-        if (category.isEmpty()) {
-            IO.println("Category can not be empty!");
-            return;
+        if (addCategory(category)) {
+            IO.println("Added the new category succesfully!");
+        } else {
+            IO.println("The category can't be empty or already exists!");
         }
-
-        if (categories.findAll().contains(category)) {
-            IO.println("Category already exists!");
-            return;
-        }
-
-        categories.add(category);
-        IO.println("Category has succesfully created!");
 
     }
 
+    boolean addCategory (String category) {
+        if (category.isEmpty()) {
+            return false;
+        }
+
+        if (categories.findAll().contains(category)) {
+            return false;
+        }
+
+        categories.add(category);
+        return true;
+    }
 
     void showAllTransactions(){
 
