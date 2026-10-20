@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class CliAppTest {
@@ -58,6 +60,21 @@ class CliAppTest {
 
         assertFalse(result);
         assertTrue(app.categories.findAll().isEmpty());
+    }
+
+    @Test
+    @DisplayName("Should store a transaction in the repository")
+    void shouldStoreATransactionInTheRepository() {
+        Transaction transaction = new Transaction(LocalDate.now(),
+                "Food",
+                50.0,
+                TransactionType.EXPENSE);
+
+        app.transactions.add(transaction);
+        //app.addtransaction(); goes wrong because no category exists.
+        assertEquals(1, app.transactions.findAll().size());
+        assertEquals(transaction, app.transactions.findAll().get(0));
+
     }
 
 }
