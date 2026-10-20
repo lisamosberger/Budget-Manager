@@ -51,4 +51,13 @@ class CliAppTest {
         assertEquals( "Food",app.categories.findAll().get(0));
     }
 
+    @Test
+    @DisplayName("Should not add category that only contains spaces")
+    void shouldNotAddCategoryThatOnlyContainsSpaces() {
+        boolean result = app.addCategory("   ");
+
+        assertFalse(result);
+        assertTrue(app.categories.findAll().isEmpty());
+    }
+
 }
