@@ -138,15 +138,38 @@ while (running) {
     }
 
     void showBalance(){
-        IO.println("Your current balance is at "
-                + budgetCalculator.calculateBalance(transactions)
-                + "\nYour Total Income is at " + budgetCalculator.calculateIncome(transactions)
-                + "\nYour Total Expense is at " + budgetCalculator.calculateExpense(transactions));
+      IO.println("======BUDGET SUMMARY=====" +
+              "\nCurrent balance: "
+              + budgetCalculator.calculateBalance(transactions)
+              + " SEK.");
+
+      IO.println("=====INCOME===== " +
+              "\nTotal income: "
+              + budgetCalculator.calculateIncome(transactions)
+              + " SEK." +
+              "\nIncome by category:");
+      for (String category: categories.findAll()) {
+          double income = budgetCalculator.calculateIncomeByCategory(transactions, category);
+
+          IO.println(category + ":" + income + " SEK.");
+      }
+
+      IO.println("=====EXPENSE===== \nTotal expense: " +
+              budgetCalculator.calculateExpense(transactions)
+              + " SEK." + "" +
+              "\nExpense by category:");
+
+      for (String category: categories.findAll()) {
+          double expense = budgetCalculator.calculateExpenseByCategory(transactions, category);
+
+          IO.println(category + ": " + expense + " SEK.");
+
+      }
 
     }
 
     void saveToFile(){
 
-    }
+    }}
 
-}
+
