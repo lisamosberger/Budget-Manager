@@ -87,7 +87,7 @@ while (running) {
         IO.println("Transaction has been sucessfully added!");
     }
 
-    private boolean checkIfValid(String input) {
+    boolean checkIfValid(String input) {
         try {
             double amount = Double.parseDouble(input);
 
