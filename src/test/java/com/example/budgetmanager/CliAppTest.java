@@ -1,13 +1,18 @@
 package com.example.budgetmanager;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class CliAppTest {
-    //Arrange
-    CliApp app = new CliApp();
+    //Arrange (Creates for every method a new CliApp, so they dont mess with eachother)
+    CliApp app;
+    @BeforeEach
+    void setUp() {
+        app = new CliApp();
+    }
 
     @Test
     @DisplayName("Should add a new Category")
@@ -35,6 +40,15 @@ class CliAppTest {
 
         assertFalse(result);
         assertTrue(app.categories.findAll().isEmpty());
+    }
+
+    @Test
+    @DisplayName("Should trim spaces from cetegory name")
+    void shouldTrimSpacesFromCategoryName() {
+        boolean result = app.addCategory(" Food   ");
+
+        assertTrue(result);
+        assertEquals( "Food",app.categories.findAll().get(0));
     }
 
 }
