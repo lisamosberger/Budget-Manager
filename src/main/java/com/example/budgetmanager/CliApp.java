@@ -45,11 +45,17 @@ while (running) {
     }
 
     void addTransaction(){
-        String input = IO.readln("Income or Expense? ");
+
+        if (categories.findAll().isEmpty()) {
+            IO.println("Please create a category first!");
+            return;
+        }
+
+        String incomeOrExpense = IO.readln("Income or Expense? ");
 
         TransactionType type;
 
-        switch (input.toUpperCase()) {
+        switch (incomeOrExpense.toUpperCase()) {
             case "INCOME" -> type =TransactionType.INCOME;
             case "EXPENSE" -> type = TransactionType.EXPENSE;
             default -> {
@@ -67,13 +73,33 @@ while (running) {
             return;
         }
 
-        double amount = Double.parseDouble(IO.readln("Enter the amount (SEK): "));
+        String input = IO.readln("Enter the amount (SEK): ");
+        if (!checkIfValid(input)) {
+            return;
+        }
+
+        double amount = Double.parseDouble(input);
 
         LocalDate date = LocalDate.now();
 
         Transaction transaction = new Transaction(date, category, amount, type);
         transactions.add(transaction);
         IO.println("Transaction has been sucessfully added!");
+    }
+
+    private boolean checkIfValid(String input) {
+        try {
+            double amount = Double.parseDouble(input);
+
+            if (amount <= 0 ){
+                IO.println("The amount must be greater than 0!");
+                return false;
+            }
+            return true;
+        } catch (NumberFormatException e) {
+            IO.println("Invalid input! Please enter a number!");
+            return false;
+        }
     }
 
     void createCategory(){
@@ -88,6 +114,9 @@ while (running) {
     }
 
     boolean addCategory (String category) {
+
+        category = category.trim();
+
         if (category.isEmpty()) {
             return false;
         }

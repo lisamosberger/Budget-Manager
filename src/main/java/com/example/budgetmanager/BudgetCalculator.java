@@ -13,6 +13,30 @@ public class BudgetCalculator {
         return totalIncome;
     }
 
+    public double calculateIncomeByCategory(Repository<Transaction> repository, String category) {
+        double totalAmount = 0;
+
+        for (Transaction transaction: repository.findAll()) {
+            if (transaction.type() == TransactionType.INCOME
+                    && transaction.category().equals(category)) {
+                totalAmount += transaction.amount();
+            }
+        }
+        return totalAmount;
+    }
+
+    public double calculateExpenseByCategory(Repository<Transaction> repository, String category) {
+        double totalAmount = 0;
+
+        for(Transaction transaction : repository.findAll()) {
+            if (transaction.type() == TransactionType.EXPENSE
+                    && transaction.category().equals(category)) {
+                totalAmount += transaction.amount();
+            }
+        }
+        return totalAmount;
+    }
+
     public double calculateExpense(Repository<Transaction> repository) {
         double totalExpense = 0;
         for (Transaction transaction: repository.findAll()){
