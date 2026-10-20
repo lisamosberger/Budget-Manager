@@ -88,4 +88,24 @@ class CliAppTest {
         assertEquals(1, app.categories.findAll().size());
     }
 
+    @Test
+    @DisplayName("Should add amounts together in same category")
+    void shouldAddAmountsTogetherInSameCategory(){
+
+        app.addCategory("Food");
+        Transaction firstTransaction = new Transaction(LocalDate.now(), "Food",
+                50.0, TransactionType.EXPENSE);
+        Transaction secondTransaction = new Transaction(LocalDate.now(), "Food",
+                50.0, TransactionType.EXPENSE);
+
+        app.transactions.add(firstTransaction);
+        app.transactions.add(secondTransaction);
+
+        double totalamount = app.budgetCalculator.calculateExpenseByCategory(
+                app.transactions, "Food");
+
+        assertEquals(100.0, totalamount, 0.0001);
+        assertEquals(1, app.categories.findAll().size());
+    }
+
 }
