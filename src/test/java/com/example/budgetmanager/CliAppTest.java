@@ -77,4 +77,15 @@ class CliAppTest {
 
     }
 
+    @Test
+    @DisplayName("Should not store categories twice")
+    void shouldNotStoreCategoriesTwice() {
+        boolean firstCategory = app.addCategory("Food");
+        boolean secondCategory = app.addCategory("Food");
+
+        assertTrue(firstCategory);
+        assertFalse(secondCategory);
+        assertEquals(1, app.categories.findAll().size());
+    }
+
 }
