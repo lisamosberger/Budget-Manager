@@ -1,9 +1,15 @@
 package com.example.budgetmanager;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Locale;
 
 public class CliApp {
+    private final Path transactionPath = Path.of("transactions.txt");
+    private final TransactionFile transactionFile = new TransactionFile();
+
     Repository<Transaction> transactions = new Repository<>();
     Repository<String> categories = new Repository<>();
     BudgetCalculator budgetCalculator = new BudgetCalculator();
@@ -160,8 +166,33 @@ while (running) {
 
     }
 
-    void saveToFile(){
+    private void saveToFile(){
+        try {
+            transactionFile.saveTransactionInFile(transactions.findAll(), transactionPath);
+            IO.println("Transaction saved successfully!");
+        } catch (IOException e) {
+            IO.println("Could not safe transaction! " + e.getMessage());
+        }
+    }
 
-    }}
+    private void loadFromFile(){
+        try {
+            List<Transaction> loadedTransaction = transactionFile.loadTransactions(transactionPath);
+
+            for (Transaction transaction : loadedTransaction) {
+                transactions.add(transaction);
+
+                if (!categories.contains(transaction.category())) {
+                    categories.add(transaction.category());
+                }
+            }
+
+            IO.println("Transactions sucessfully reloaded!");
+        }catch (IOException e ) {
+            IO.println("Transaction could not load!" + e.getMessage());
+        }
+    }
+
+}
 
 
