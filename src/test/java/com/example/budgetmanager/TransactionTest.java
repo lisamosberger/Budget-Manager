@@ -28,5 +28,15 @@ class TransactionTest {
 
     }
 
+    @Test
+    @DisplayName("should throw exception when amount is negative")
+    void shouldThrowExceptionWhenAmountIsNegative () {
+        LocalDate date = LocalDate.now();
+
+        assertThrows(InvalidTransactionException.class, () -> new Transaction(
+                date, "Food", -5.0, TransactionType.EXPENSE
+        ));
+    }
+
 
 }

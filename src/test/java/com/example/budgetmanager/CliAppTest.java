@@ -108,20 +108,4 @@ class CliAppTest {
         assertEquals(1, app.categories.findAll().size());
     }
 
-    @Test
-    @DisplayName("should return false if not a number")
-    void shouldReturnFalseIfNotANumber() {
-        String amount = "ABC";
-
-        boolean letters = app.checkIfValid(amount);
-        assertFalse(letters);
-    }
-    @Test
-    @DisplayName("Should return true if valid amount")
-    void shouldReturnTrueIfValidAmount() {
-        String amount = "100.00";
-        boolean numbers = app.checkIfValid(amount);
-        assertTrue(numbers);
-    }
-
 }
