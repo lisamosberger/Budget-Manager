@@ -5,7 +5,13 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
-
+/*
+TODO: Another format in Show all transactions!,
+ create test for everything,
+ ReadME
+ Reflect all Errors and test handling i had
+ Try to find more errors and go trough everything in the document for G and VG grade
+ */
 public class CliApp {
     private final Path transactionPath = Path.of("transactions.txt");
     private final TransactionFile transactionFile = new TransactionFile();
@@ -16,24 +22,27 @@ public class CliApp {
 
     boolean running = true;
     void main (){
+        loadFromFile();
 
 while (running) {
     IO.println("\tBudget Planer" +
             "\n=======================================" +
-            "\n1. Add transaction" +
-            "\n2. Create category" +
-            "\n3. Show all transactions" +
-            "\n4. Show balance and summery by category" +
-            "\n5. Save to file" +
+            "\n1. Load Transactions!" +
+            "\n2.  Add transaction" +
+            "\n3. Create category" +
+            "\n4. Show all transactions" +
+            "\n5. Show balance and summery by category" +
+            "\n6. Save to file" +
             "\ne. Exit ");
 
     String input = IO.readln("Choose an option: ");
     switch (input) {
-        case "1" -> addTransaction();
-        case "2" -> createCategory();
-        case "3" -> showAllTransactions();
-        case "4" -> showBalance();
-        case "5" -> saveToFile();
+        case "1" -> loadFromFile();
+        case "2" -> addTransaction();
+        case "3" -> createCategory();
+        case "4" -> showAllTransactions();
+        case "5" -> showBalance();
+        case "6" -> saveToFile();
         case "e" -> exit();
         default -> IO.println("Thats not an option!");
     }
@@ -73,8 +82,9 @@ while (running) {
                 "\n=======================================");
         categories.findAll().forEach(c -> IO.println(c));
 
-        String category = IO.readln("Enter Category: ");
-        if (!categories.findAll().contains(category)){
+        String category = IO.readln("Enter Category: ").trim();
+        if (!categories.findAll().
+                stream().anyMatch(c -> c.equalsIgnoreCase(category))){
             IO.println("This category doesn't exists, please choose another one!");
             return;
         }
@@ -113,7 +123,7 @@ while (running) {
 
     boolean addCategory (String category) {
 
-        category = category.trim();
+        category = formatCategory(category);
 
         if (category.isEmpty()) {
             return false;
@@ -152,6 +162,10 @@ while (running) {
           IO.println(category + ":" + income + " SEK.");
       }
 
+      /*
+      TODO: Change that it only shows category if it is not zero!
+       */
+
       IO.println("=====EXPENSE===== \nTotal expense: " +
               budgetCalculator.calculateExpense(transactions)
               + " SEK." + "" +
@@ -186,11 +200,22 @@ while (running) {
                     categories.add(transaction.category());
                 }
             }
-
+            IO.println("Loaded Transactions: " + loadedTransaction.size());
             IO.println("Transactions sucessfully reloaded!");
         }catch (IOException e ) {
             IO.println("Transaction could not load!" + e.getMessage());
         }
+
+    }
+
+    private String formatCategory(String category) {
+        category = category.trim().toLowerCase();
+
+        if (category.isEmpty()) {
+            return category;
+        }
+        return category.substring(0, 1). toUpperCase()
+                + category.substring(1);
     }
 
 }

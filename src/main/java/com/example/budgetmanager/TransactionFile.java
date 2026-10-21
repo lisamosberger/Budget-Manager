@@ -51,6 +51,7 @@ public class TransactionFile {
                 }
 
                 Transaction transaction = new Transaction(date, category, amount, type);
+                transactions.add(transaction);
 
             } catch (IllegalArgumentException e) {
                 IO.println("Invalid transaction, line skipped");
