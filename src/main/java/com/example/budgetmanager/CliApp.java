@@ -74,33 +74,25 @@ while (running) {
         }
 
         String input = IO.readln("Enter the amount (SEK): ");
-        if (!checkIfValid(input)) {
-            return;
-        }
 
-        double amount = Double.parseDouble(input);
-
-        LocalDate date = LocalDate.now();
-
-        Transaction transaction = new Transaction(date, category, amount, type);
-        transactions.add(transaction);
-        IO.println("Transaction has been sucessfully added!");
-    }
-
-    boolean checkIfValid(String input) {
         try {
-            double amount = Double.parseDouble(input);
+            double amount = Double.parseDouble(
+                    input.replace(",", "."));
 
-            if (amount <= 0 ){
-                IO.println("The amount must be greater than 0!");
-                return false;
-            }
-            return true;
-        } catch (NumberFormatException e) {
-            IO.println("Invalid input! Please enter a number!");
-            return false;
+            Transaction transaction = new Transaction(
+                    LocalDate.now(), category, amount, type);
+            transactions.add(transaction);
+            IO.println("Transaction has been added!");
+
+        } catch (NumberFormatException | InvalidTransactionException e ) {
+            IO.println("Invalid Transaction: " + e.getMessage());
+
+
         }
+
     }
+
+
 
     void createCategory(){
         String category = IO.readln("Enter new category: ");
