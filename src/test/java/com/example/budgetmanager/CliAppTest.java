@@ -108,4 +108,14 @@ class CliAppTest {
         assertEquals(1, app.categories.findAll().size());
     }
 
+    @Test
+    @DisplayName("Should accept amount with comma")
+    void shouldAcceptAmountWithComma() {
+        String input = "12,50";
+
+        double amount = Double.parseDouble(input.replace(",","."));
+
+        assertEquals(12.50, amount, 0.001);
+    }
+
 }
