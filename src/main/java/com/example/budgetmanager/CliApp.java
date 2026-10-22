@@ -5,6 +5,8 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
+import java.util.logging.Logger;
+
 /*
 TODO: Another format in Show all transactions!,
  create test for everything,
@@ -13,6 +15,7 @@ TODO: Another format in Show all transactions!,
  Try to find more errors and go trough everything in the document for G and VG grade
  */
 public class CliApp {
+    private static final Logger log = BudgetLogger.getLogger();
     private final Path transactionPath = Path.of("transactions.txt");
     private final TransactionFile transactionFile = new TransactionFile();
 
