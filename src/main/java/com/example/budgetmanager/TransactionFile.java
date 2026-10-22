@@ -6,8 +6,11 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class TransactionFile {
+    private static final Logger log = Logger.getLogger(TransactionFile.class.getName());
 
     public void saveTransactionInFile(List<Transaction> transactions, Path path)
             throws IOException {
@@ -23,7 +26,7 @@ public class TransactionFile {
         Files.write(path, files);
     }
 
-    public List<Transaction> loadTransactions(Path path) throws IOException {
+    public List<Transaction> loadTransactions(Path path) throws IOException, FileFormatException {
 
         List<Transaction> transactions = new ArrayList<>();
 
@@ -33,12 +36,13 @@ public class TransactionFile {
 
         List<String> files = Files.readAllLines(path);
 
-        for (String file : files) {
-            try {
-                String[] parts = file.split(",",-1);
+        for (int i = 0; i < files.size(); i++) {
+                String file = files.get(i);
+                int lineNumber = i + 1;
+try {
+                String[] parts = file.split(",");
                 if (parts.length != 4) {
-                    IO.println("Invalid transaction, line skipped!");
-                    continue;
+                    throw new FileFormatException(lineNumber, "Excpected 4 values");
                 }
                 LocalDate date = LocalDate.parse(parts[0]);
                 String category = parts[1];
@@ -46,15 +50,18 @@ public class TransactionFile {
                 TransactionType type = TransactionType.valueOf(parts[3]);
 
                 if (category.isBlank() || amount <= 0 || !Double.isFinite(amount)) {
-                    IO.println("Invalid transaction, line skipped!");
-                    continue;
+                    throw new FileFormatException(lineNumber, "Category is Empty");
                 }
+
 
                 Transaction transaction = new Transaction(date, category, amount, type);
                 transactions.add(transaction);
 
-            } catch (IllegalArgumentException e) {
+            } catch (FileFormatException e) {
+                log.log(Level.WARNING, e.getMessage());
                 IO.println("Invalid transaction, line skipped");
+            } catch (RuntimeException e) {
+                log.log(Level.WARNING, "Invalid transaction format" + e.getMessage());
             }
         }
          return transactions;

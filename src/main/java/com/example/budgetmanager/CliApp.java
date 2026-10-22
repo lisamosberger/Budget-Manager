@@ -36,24 +36,22 @@ public class CliApp {
 while (running) {
     IO.println("\tBudget Planer" +
             "\n=======================================" +
-            "\n1. Load Transactions!" +
-            "\n2.  Add transaction" +
-            "\n3. Create category" +
-            "\n4. Show all transactions" +
-            "\n5. Show balance and summery by category" +
-            "\n6. Save to file" +
-            "\n7. Filter and sort transactions" +
+            "\n1.  Add transaction" +
+            "\n2. Create category" +
+            "\n3. Show all transactions" +
+            "\n4. Show balance and summery by category" +
+            "\n5. Save to file" +
+            "\n6. Filter and sort transactions" +
             "\ne. Exit ");
 
     String input = IO.readln("Choose an option: ");
     switch (input) {
-        case "1" -> loadFromFile();
-        case "2" -> addTransaction();
-        case "3" -> createCategory();
-        case "4" -> showAllTransactions();
-        case "5" -> showBalance();
-        case "6" -> saveToFile();
-        case "7" -> filterTransactions();
+        case "1" -> addTransaction();
+        case "2" -> createCategory();
+        case "3" -> showAllTransactions();
+        case "4" -> showBalance();
+        case "5" -> saveToFile();
+        case "6" -> filterTransactions();
         case "e" -> exit();
         default -> IO.println("Thats not an option!");
     }
@@ -163,7 +161,6 @@ while (running) {
     }
 
     void showAllTransactions(){
-
         IO.println("Every Transaction made " +
                 "\n===================================");
         printTransactions(TransactionFilter.sortByDate(transactions.findAll()));
@@ -230,8 +227,10 @@ while (running) {
     private void saveToFile(){
         try {
             transactionFile.saveTransactionInFile(transactions.findAll(), transactionPath);
+            log.info("File sucessfully saved!");
             IO.println("Transaction saved successfully!");
         } catch (IOException e) {
+            log.log(Level.WARNING, "File had problems saving!");
             IO.println("Could not safe transaction! " + e.getMessage());
         }
     }
@@ -249,7 +248,9 @@ while (running) {
             }
             IO.println("Loaded Transactions: " + loadedTransaction.size());
             IO.println("Transactions sucessfully reloaded!");
+            log.info("File loaded sucessfully!");
         }catch (IOException e ) {
+            log.log(Level.WARNING, "File could not load!");
             IO.println("Transaction could not load!" + e.getMessage());
         }
 
