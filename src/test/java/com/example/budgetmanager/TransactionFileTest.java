@@ -64,6 +64,7 @@ class TransactionFileTest {
         Files.write(file, List.of(
             "2023-05-06,Food,15.0,EXPENSE",
             "this is broken",
+                "not-a-date,Salary,200,EXPENSE",
             "2023-01-05,Salary,100.0,INCOME"
         ));
         List<Transaction> loaded =transactionFile.loadTransactions(file);
@@ -103,6 +104,8 @@ List<Transaction>loaded =transactionFile.loadTransactions(file);
 
 assertEquals(save, loaded);
     }
+
+
 
 
 
