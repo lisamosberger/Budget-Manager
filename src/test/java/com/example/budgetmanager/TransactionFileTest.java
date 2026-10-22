@@ -91,6 +91,19 @@ class TransactionFileTest {
                 e.getMessage());
     }
 
+    @Test
+    @DisplayName("Save and load should give the same transaction")
+    void saveAndLoadShouldGiveTheSameTransaction () throws IOException {
+        List<Transaction> save = List.of(new Transaction(LocalDate.now(), "Food", 15.0, TransactionType.EXPENSE),
+                new Transaction(LocalDate.now(), "Salary", 20.0, TransactionType.INCOME));
+Path file = tempdir.resolve("beforeAndAfter.txt");
+
+transactionFile.saveTransactionInFile(save, file);
+List<Transaction>loaded =transactionFile.loadTransactions(file);
+
+assertEquals(save, loaded);
+    }
+
 
 
 }

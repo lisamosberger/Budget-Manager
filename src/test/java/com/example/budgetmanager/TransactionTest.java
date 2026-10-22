@@ -1,5 +1,6 @@
 package com.example.budgetmanager;
 
+import net.bytebuddy.asm.Advice;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -38,5 +39,13 @@ class TransactionTest {
         ));
     }
 
+    @Test
+    @DisplayName("Should throw for null date")
+        void shouldThrowForNullDate () {
+            LocalDate date = null;
+
+            assertThrows(InvalidTransactionException.class,
+                    () -> new Transaction(date, "Food", 5.0, TransactionType.EXPENSE));
+        }
 
 }

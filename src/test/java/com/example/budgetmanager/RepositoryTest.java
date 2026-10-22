@@ -1,5 +1,6 @@
 package com.example.budgetmanager;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -45,6 +46,16 @@ class RepositoryTest {
 
         assertEquals(1, result.size());
         assertEquals(transaction, result.get(0));
+    }
+
+    @Test
+    @DisplayName("Should work with other types too")
+    void shouldWorkWithOtherTypesToo() {
+        Repository<String> names = new Repository<>();
+        names.add("Food");
+        names.add("Cool");
+
+        assertEquals(List.of("Food"), names.findWhere(s -> s.startsWith("F")));
     }
 
 }

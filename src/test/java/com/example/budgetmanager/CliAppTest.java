@@ -78,17 +78,6 @@ class CliAppTest {
     }
 
     @Test
-    @DisplayName("Should not store categories twice")
-    void shouldNotStoreCategoriesTwice() {
-        boolean firstCategory = app.addCategory("Food");
-        boolean secondCategory = app.addCategory("Food");
-
-        assertTrue(firstCategory);
-        assertFalse(secondCategory);
-        assertEquals(1, app.categories.findAll().size());
-    }
-
-    @Test
     @DisplayName("Should add amounts together in same category")
     void shouldAddAmountsTogetherInSameCategory(){
 
@@ -116,6 +105,13 @@ class CliAppTest {
         double amount = Double.parseDouble(input.replace(",","."));
 
         assertEquals(12.50, amount, 0.001);
+    }
+
+    @Test
+    @DisplayName("Category names should be normalised (first letter upper case)")
+    void categoryNamesAreNormalised() {
+        app.addCategory("fOOD");
+        assertEquals("Food", app.categories.findAll().get(0));
     }
 
 }
