@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -165,7 +166,7 @@ while (running) {
 
         IO.println("Every Transaction made " +
                 "\n===================================");
-        printTransactions(transactions.findAll());
+        printTransactions(TransactionFilter.sortByDate(transactions.findAll()));
 
     }
 
@@ -175,12 +176,12 @@ while (running) {
             return;
         }
 
-        IO.println(transactions.findAll().forEach(t->IO.println(
+        list.forEach(t->IO.println(
                 "Date: " + t.date() +
                         "\nCategory: " + t.category()
                         + "\nAmount:" + t.amount() + " " +
                         t.type()
-                        + "\n----------------------------------" )););
+                        + "\n----------------------------------" ));
     }
 
     void showBalance(){
@@ -194,27 +195,31 @@ while (running) {
               + budgetCalculator.calculateIncome(transactions)
               + " SEK." +
               "\nIncome by category:");
-      for (String category: categories.findAll()) {
-          double income = budgetCalculator.calculateIncomeByCategory(transactions, category);
-
-          IO.println(category + ":" + income + " SEK.");
-      }
-
-      /*
-      TODO: Change that it only shows category if it is not zero!
-       */
+      budgetCalculator.sumByCategory(transactions, TransactionType.INCOME)
+              .forEach((category, sum) -> IO.println(category + ": " + sum + "SEK"));
 
       IO.println("=====EXPENSE===== \nTotal expense: " +
               budgetCalculator.calculateExpense(transactions)
               + " SEK." + "" +
               "\nExpense by category:");
+      budgetCalculator.sumByCategory(transactions, TransactionType.EXPENSE)
+              .forEach((category, sum) -> IO.println(category + ": " + sum + "SEK"));
 
-      for (String category: categories.findAll()) {
-          double expense = budgetCalculator.calculateExpenseByCategory(transactions, category);
+    }
 
-          IO.println(category + ": " + expense + " SEK.");
+    private void filterTransactions () {
+        Predicate<Transaction> filter= t ->true;
 
-      }
+        String input =IO.readln("Type(Income/Expense), enter for all: ").trim();
+        if (!input.isEmpty()) {
+            try {
+                filter = filter.and(TransactionFilter.byType(TransactionType.valueOf(input.toUpperCase())));
+            } catch (IllegalArgumentException e) {
+                log.log(Level.WARNING, "Couldn't Filter");
+                IO.println("Thats not a possible answer");
+                return;
+            }
+        }
 
     }
 

@@ -1,49 +1,42 @@
 package com.example.budgetmanager;
 
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
+
 public class BudgetCalculator {
 
 
     public double calculateIncome(Repository<Transaction> repository) {
-        double totalIncome = 0;
-
-        for (Transaction transaction : repository.findAll()) {
-            if (transaction.type() == TransactionType.INCOME)
-                totalIncome += transaction.amount();
-        }
-        return totalIncome;
-    }
-
-    public double calculateIncomeByCategory(Repository<Transaction> repository, String category) {
-        double totalAmount = 0;
-
-        for (Transaction transaction: repository.findAll()) {
-            if (transaction.type() == TransactionType.INCOME
-                    && transaction.category().equals(category)) {
-                totalAmount += transaction.amount();
-            }
-        }
-        return totalAmount;
-    }
-
-    public double calculateExpenseByCategory(Repository<Transaction> repository, String category) {
-        double totalAmount = 0;
-
-        for(Transaction transaction : repository.findAll()) {
-            if (transaction.type() == TransactionType.EXPENSE
-                    && transaction.category().equals(category)) {
-                totalAmount += transaction.amount();
-            }
-        }
-        return totalAmount;
+       return repository.findAll().stream()
+               .filter(t -> t.type() == TransactionType.INCOME)
+               .mapToDouble(Transaction::amount)
+               .sum();
     }
 
     public double calculateExpense(Repository<Transaction> repository) {
-        double totalExpense = 0;
-        for (Transaction transaction: repository.findAll()){
-            if (transaction.type() == TransactionType.EXPENSE)
-                totalExpense += transaction.amount();
-        }
-        return totalExpense;
+       return repository.findAll().stream()
+               .filter(t -> t.type() == TransactionType.EXPENSE)
+               .mapToDouble(Transaction::amount)
+               .sum();
+    }
+
+    public double calculateByCategory(Repository<Transaction> repository, TransactionType type, String category) {
+        return repository.findAll().stream()
+                .filter(t->t.type() == type)
+                .filter(t -> t.category().equalsIgnoreCase(category))
+                .mapToDouble(Transaction::amount)
+                .sum();
+    }
+
+    public Map<String, Double> sumByCategory(Repository<Transaction> repository, TransactionType type) {
+        return repository.findAll().stream()
+                .filter(t-> t.type() == type)
+                .collect(Collectors.groupingBy(
+                        Transaction::category,
+                        TreeMap::new,
+                        Collectors.summingDouble(Transaction::amount)
+                ));
     }
 
     public double calculateBalance(Repository<Transaction> repository) {
