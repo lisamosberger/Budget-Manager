@@ -221,6 +221,10 @@ while (running) {
             }
         }
 
+        List<Transaction> result =transactions.findWhere(filter);
+        result = TransactionFilter.sortByAmount(result);
+        printTransactions(result);
+
     }
 
     private void saveToFile(){
