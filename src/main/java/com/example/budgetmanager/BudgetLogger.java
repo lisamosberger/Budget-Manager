@@ -9,7 +9,7 @@ import java.util.logging.SimpleFormatter;
 public class BudgetLogger {
     private static final Logger logger = Logger.getLogger(BudgetLogger.class.getName());
 
-    public static void init () {
+    public static void init (String Logfile) {
         try {
             FileHandler fileHandler = new FileHandler("application.log", true);
 

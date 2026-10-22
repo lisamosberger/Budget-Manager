@@ -1,10 +1,13 @@
 package com.example.budgetmanager;
 
+import java.awt.dnd.DropTarget;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /*
@@ -25,6 +28,8 @@ public class CliApp {
 
     boolean running = true;
     void main (){
+        BudgetLogger.init("BudgetPlaner.log");
+        log.info("Application started");
         loadFromFile();
 
 while (running) {
@@ -36,6 +41,7 @@ while (running) {
             "\n4. Show all transactions" +
             "\n5. Show balance and summery by category" +
             "\n6. Save to file" +
+            "\n7. Filter and sort transactions" +
             "\ne. Exit ");
 
     String input = IO.readln("Choose an option: ");
@@ -46,6 +52,7 @@ while (running) {
         case "4" -> showAllTransactions();
         case "5" -> showBalance();
         case "6" -> saveToFile();
+        case "7" -> filterTransactions();
         case "e" -> exit();
         default -> IO.println("Thats not an option!");
     }
@@ -58,13 +65,18 @@ while (running) {
     }
 
     void exit () {
+        saveToFile();
         running = false;
+        log.info("Application stopped.");
         IO.println("Goodbye!");
     }
+
+
 
     void addTransaction(){
 
         if (categories.findAll().isEmpty()) {
+            log.warning("Tried adding transaction without any category!");
             IO.println("Please create a category first!");
             return;
         }
@@ -77,20 +89,23 @@ while (running) {
             case "INCOME" -> type =TransactionType.INCOME;
             case "EXPENSE" -> type = TransactionType.EXPENSE;
             default -> {
+                log.log(Level.WARNING, "Invalid transactionType ", incomeOrExpense);
                 IO.println("Thats not an option!");
                 return;
             }
         }
         IO.println("Choose a Category " +
                 "\n=======================================");
-        categories.findAll().forEach(c -> IO.println(c));
+        categories.findAll().forEach(IO::println);
 
-        String category = IO.readln("Enter Category: ").trim();
-        if (!categories.findAll().
-                stream().anyMatch(c -> c.equalsIgnoreCase(category))){
-            IO.println("This category doesn't exists, please choose another one!");
-            return;
-        }
+        String categoryInput = IO.readln("Enter Category: ").trim();
+
+        Optional<String> category = findCategory(categoryInput);
+            if (category.isEmpty()) {
+                log.log(Level.WARNING, "Unknown category: " + categoryInput);
+                IO.println("This category does not exist!");
+                return;
+            }
 
         String input = IO.readln("Enter the amount (SEK): ");
 
@@ -99,14 +114,14 @@ while (running) {
                     input.replace(",", "."));
 
             Transaction transaction = new Transaction(
-                    LocalDate.now(), category, amount, type);
+                    LocalDate.now(), category.get(), amount, type);
             transactions.add(transaction);
+            log.log(Level.INFO, "Transaction has been added", transaction);
             IO.println("Transaction has been added!");
 
         } catch (NumberFormatException | InvalidTransactionException e ) {
+            log.log(Level.WARNING, "Amount is not a number or has been rejected.");
             IO.println("Invalid Transaction: " + e.getMessage());
-
-
         }
 
     }
@@ -138,6 +153,15 @@ while (running) {
 
         categories.add(category);
         return true;
+    }
+
+    Optional<String> findCategory(String category) {
+        for (String c : categories.findAll()) {
+            if (category.equalsIgnoreCase(category.trim())) {
+                return Optional.of(c);
+            }
+        }
+        return Optional.empty();
     }
 
     void showAllTransactions(){
