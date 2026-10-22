@@ -41,7 +41,7 @@ while (running) {
             "\n3. Show all transactions" +
             "\n4. Show balance and summery by category" +
             "\n5. Save to file" +
-            "\n6. Filter and sort transactions" +
+            "\n6. Filter transactions" +
             "\ne. Exit ");
 
     String input = IO.readln("Choose an option: ");

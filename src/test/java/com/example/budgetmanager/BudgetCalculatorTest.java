@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -80,6 +81,22 @@ class BudgetCalculatorTest {
                 TransactionType.INCOME)));
         double result = calculator.calculateBalance(repository);
         assertEquals(-300.0, result);
+    }
+
+    @Test
+    @DisplayName("sumByCategory groups and sums per category")
+    void sumByCategoryGroupsAndSums() {
+        repository.add(new Transaction(LocalDate.now(), "Food", 100.0, TransactionType.EXPENSE));
+        repository.add(new Transaction( LocalDate.now(), "Food", 50.0, TransactionType.EXPENSE));
+        repository.add(new Transaction( LocalDate.now(), "Transport", 70.0, TransactionType.EXPENSE));
+        repository.add(new Transaction(LocalDate.now(), "Salary", 3000.0, TransactionType.INCOME));
+
+        Map<String, Double> result = calculator.sumByCategory(repository, TransactionType.EXPENSE);
+
+        assertEquals(2, result.size());
+        assertEquals(150.0, result.get("Food"), 0.0001);
+        assertEquals(70.0, result.get("Transport"), 0.0001);
+        assertFalse(result.containsKey("Salary"));
     }
 
 }

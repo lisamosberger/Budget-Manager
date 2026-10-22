@@ -57,5 +57,40 @@ class TransactionFileTest {
         assertEquals("2026-04-02,Food,14.0,EXPENSE", files.get(1));
     }
 
+    @Test
+    @DisplayName("Should skip broken lines")
+    void shouldSkipBrokenLines() throws IOException {
+        Path file = tempdir.resolve("broken.txt");
+        Files.write(file, List.of(
+            "2023-05-06,Food,15.0,EXPENSE",
+            "this is broken",
+            "2023-01-05,Salary,100.0,INCOME"
+        ));
+        List<Transaction> loaded =transactionFile.loadTransactions(file);
+        assertEquals(2, loaded.size());
+        assertEquals("Food", loaded.get(0).category());
+        assertEquals("Salary", loaded.get(1).category());
+
+    }
+
+    @Test
+    @DisplayName("Should give empty list")
+    void shouldGiveEmptyList() throws IOException {
+        Path file = Files.createFile(tempdir.resolve("empty.txt"));
+
+        assertTrue(transactionFile.loadTransactions(file).isEmpty());
+    }
+
+    @Test
+    @DisplayName("Should Throw FileFormatException for wrong field count")
+    void shouldThrowFileFormatExceptionForWrongFieldCount() throws IOException {
+        FileFormatException e = new FileFormatException(7, "Expected 4 values");
+
+        assertEquals(7, e.getLineNumber());
+        assertEquals("Line: 7: Expected 4 values",
+                e.getMessage());
+    }
+
+
 
 }

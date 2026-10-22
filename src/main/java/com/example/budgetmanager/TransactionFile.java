@@ -26,7 +26,7 @@ public class TransactionFile {
         Files.write(path, files);
     }
 
-    public List<Transaction> loadTransactions(Path path) throws IOException, FileFormatException {
+    public List<Transaction> loadTransactions(Path path) throws IOException {
 
         List<Transaction> transactions = new ArrayList<>();
 
@@ -40,9 +40,9 @@ public class TransactionFile {
                 String file = files.get(i);
                 int lineNumber = i + 1;
 try {
-                String[] parts = file.split(",");
+                String[] parts = file.split(",", -1);
                 if (parts.length != 4) {
-                    throw new FileFormatException(lineNumber, "Excpected 4 values");
+                    throw new FileFormatException(lineNumber, "Expected 4 values");
                 }
                 LocalDate date = LocalDate.parse(parts[0]);
                 String category = parts[1];

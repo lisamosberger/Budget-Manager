@@ -101,8 +101,8 @@ class CliAppTest {
         app.transactions.add(firstTransaction);
         app.transactions.add(secondTransaction);
 
-        double totalamount = app.budgetCalculator.calculateExpenseByCategory(
-                app.transactions, "Food");
+        double totalamount = app.budgetCalculator.calculateByCategory(
+                app.transactions, TransactionType.EXPENSE,"Food");
 
         assertEquals(100.0, totalamount, 0.0001);
         assertEquals(1, app.categories.findAll().size());
