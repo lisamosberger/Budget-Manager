@@ -142,7 +142,12 @@ while (running) {
         IO.println("Every Transaction made " +
                 "\n===================================");
 
-        transactions.findAll().forEach(t->IO.println(t));
+        transactions.findAll().forEach(t->IO.println(
+                "Date: " + t.date() +
+                "\nCategory: " + t.category()
+                + "\nAmount:" + t.amount() + " " +
+                        t.type()
+                + "\n----------------------------------" ));
     }
 
     void showBalance(){
