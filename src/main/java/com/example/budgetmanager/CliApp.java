@@ -165,13 +165,22 @@ while (running) {
 
         IO.println("Every Transaction made " +
                 "\n===================================");
+        printTransactions(transactions.findAll());
 
-        transactions.findAll().forEach(t->IO.println(
+    }
+
+    private void printTransactions(List<Transaction> list) {
+        if (list.isEmpty()) {
+            IO.println("No transaction found");
+            return;
+        }
+
+        IO.println(transactions.findAll().forEach(t->IO.println(
                 "Date: " + t.date() +
-                "\nCategory: " + t.category()
-                + "\nAmount:" + t.amount() + " " +
+                        "\nCategory: " + t.category()
+                        + "\nAmount:" + t.amount() + " " +
                         t.type()
-                + "\n----------------------------------" ));
+                        + "\n----------------------------------" )););
     }
 
     void showBalance(){
