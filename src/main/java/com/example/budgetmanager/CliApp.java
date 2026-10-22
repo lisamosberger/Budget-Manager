@@ -126,8 +126,6 @@ while (running) {
 
     }
 
-
-
     void createCategory(){
         String category = IO.readln("Enter new category: ");
 
@@ -143,25 +141,24 @@ while (running) {
 
         category = formatCategory(category);
 
-        if (category.isEmpty()) {
+        if (category.isEmpty()|| category.contains(",")) {
+            log.log(Level.WARNING, "Rejected category name!");
             return false;
         }
 
         if (categories.findAll().contains(category)) {
+            log.log(Level.WARNING, "Category already exists!");
             return false;
         }
 
         categories.add(category);
+        log.log(Level.INFO, "Category created!");
         return true;
     }
 
     Optional<String> findCategory(String category) {
-        for (String c : categories.findAll()) {
-            if (category.equalsIgnoreCase(category.trim())) {
-                return Optional.of(c);
-            }
-        }
-        return Optional.empty();
+    return categories.findAll().stream().filter(c -> c.equalsIgnoreCase(category.trim()))
+        .findFirst();
     }
 
     void showAllTransactions(){
