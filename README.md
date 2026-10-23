@@ -5,7 +5,7 @@ and see how much money he has left. It is also possible to save the transactions
 will be automatically loaded when starting the program. 
 
 I divided the program into different classes to make the code easier to understand 
-and follow. Each class has has its own responsibility. 
+and follow. Each class has its own responsibility. 
 The CliApp handles the suer interaction, the BudgetCalculator 
 calculates the totals and the TransactionFile saves and loads the
 transactions
@@ -17,6 +17,7 @@ The program contains:
 - Show all transactions
 - Show the balance and the income and expense in total and per category
 - Filter transactions by type and sort them by amount
+- Remove one single transaction or clear all of them
 - Save the transactions to a file and load them at start
 - Log invalig input and file problems on several levels
 
@@ -74,7 +75,7 @@ transactions when the file is loaded
 - [X] Several meaningful commits, including commits for tests
 
 ## VG requirements
-- [ ] Logging on several levels (DEBUG, INFO, WARN, ERROR)
+- [X] Logging on several levels (DEBUG, INFO, WARN, ERROR)
 - [X] Reflection about generics and the Stream API 
 
 ## Testing 
@@ -86,8 +87,8 @@ The tests follow Arrange Act Assert and each test checks one thing
 Because the amounts are double, I compare them with a delta 0.0001.
 
 ## Debugging and bug report
-I found the bugs below while testing. For each one i got either a failed test 
-or a failed program. After this i used the debugger to find the cause, which 
+I found the bugs below while testing. For each one I got either a failed test 
+or a failed program. After this I used the debugger to find the cause, which 
 i could then fix and created a test as protections. All the tests now pass.
 
 Bug 1: A broken date in the file crashed the program at start
@@ -114,41 +115,34 @@ normally
 The test is calld "shouldSkipBrokenLines" in TransactionFileTest.
 
 Bug 2: A category typed in different capitalisations got the wrong sum 
-I created the category food and added expense to Food. At first you couldnt even add them in the category 
+I created the category food and added expense to Food. At first you couldn't even add them in the category 
 because the program didn't connect these two. 
- I found it while running the program by hand and then i noticed that 
+ I found it while running the program by hand and then I noticed that 
 it always gave an error.
-This Error was pretty simple to fix, additionally i added an method that 
+This Error was pretty simple to fix, additionally I added an method that 
 makes the capitalisation better, the first letter is always a big one while the other 
 that follows are set to lowercase.
 
-Smaller mistakes like that i loaded the transactions twice in the beginning or that comma could be created but 
+Smaller mistakes like that I loaded the transactions twice in the beginning or that comma could be created but 
 never used were simple to fix but hard to find in my opinion. 
 
 
 ## Logging 
-i used java.util.logging.BudgetLogger which created a logger with a 
-file handler and the classes CLiApp, Repository and TransactionFile all ruse this 
-logger. For me from the beginning till now i forgot in most parts the logger because it is new 
-to me to log everything that goes wrong. 
+I used a logger with a file handler, the classes CLiApp, Repository and TransactionFile used the logger.
+In the end of the project I realised what a big help it could have been, to find the problems. 
+But because it was the first time using a logger in a project for me I added it really late to 
+the project. I understand now how it can improve the working flow in finding bugs and solving them. 
 
-I used FINE for DEBUG and WARNING for ERROR
-
-FINE i used for details that only matter when i look 
-for a bug, for example Menu choice, "Added Item" in the repository
-
-INFO I used for normal events, like application stopped or file loaded or saved. 
-
-WARNING I used when something is wrong but the program continues. For Unknwon category or invalid amount 
-for example. 
+I used FINE for small problems, WARNING for problems such as invalid transaction data, 
+SEVERE only when failing to save or load a file and INFO to log info if it actions were sucessfully.
 
 ## Reflection 
 Generics: Repository<T> Withour generics I would have needed two nearly 
 identical classes, one for transactions and one for category names or one class that stores 
 Objects. With Repository<T>  I wrote the logic once and the compiler 
 checks the type everywhere. It was really usefull because it was easier to handle and 
-save into a list. There wasnt't anything double. findWhere() made it even more reusable. The same method is
-used with every condition from TransactionFilter and the repository 
+save into a list. There wasnt't anything double. findWhere() made it even more reusable. 
+The same method is used with every condition from TransactionFilter and the repository 
 does not know anything about transactions. 
 
 Stram API 
@@ -171,20 +165,18 @@ than loops but for long chains it can be easier to split them up.
 
 Most of my first tests tested the normal case. The bugs 
 were in edge cases, a broken line in a file or a different speling. Because of this 
-i think sometimes its better to write first the tests before the method itself
+I think sometimes its better to write first the tests before the method itself
 I also learned also that a failling test makes debugging much faster, 
 because you know what where the error happens and i know where to 
-put the breakpoint and when i am done. 
-For Logging i still need to practice how to use it propperly 
-and when. In the end i understood that i is practical to use, but i completly forgot to add 
-that function in the begginning when i started the program. Now i know that 
+put the breakpoint and when I am done. 
+For Logging I still need to practice how to use it propperly 
+and when. In the end I understood that I is practical to use, but i completly forgot to add 
+that function in the begginning when I started the program. Now i know that 
 logging is something to set up in the beggining of a project.
 
 ## Limitations 
 - A new transaction in my program only gets todays date, this is possible to change. 
 - The filter in the menu only filters by type -> expense or income.
-- A transaction cannot be edited
-- A category without any transaction is not saved in file, so 
-- it is gone after a restart 
+- A category without any transaction is not saved in file, so the category will be gone after a restart.
 - Amounts are double. For real money BigDecimal would be probably safer.
 - The menu CliApp is only tested through its helper methods, because it reads from the keyboard.
