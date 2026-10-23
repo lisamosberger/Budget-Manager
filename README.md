@@ -74,7 +74,7 @@ transactions when the file is loaded
 - [X] Several meaningful commits, including commits for tests
 
 ## VG requirements
-- [ ] Logging on several levels (DEBUG, iNFO, wARN, ERROR)
+- [ ] Logging on several levels (DEBUG, INFO, WARN, ERROR)
 - [X] Reflection about generics and the Stream API 
 
 ## Testing 

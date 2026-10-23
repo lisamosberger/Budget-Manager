@@ -39,8 +39,14 @@ public class Repository <T> {
         return items.isEmpty();
     }
 
+    public boolean remove(T item) {
+        log.log(Level.FINE, "Item removed!");
+        return items.remove(item);
+    }
+
     public void clear() {
         items.clear();
-        log.fine("Repository cleared");
+        log.log(Level.FINE, "Repository cleared.");
     }
+
 }
