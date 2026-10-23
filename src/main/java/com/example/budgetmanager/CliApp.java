@@ -1,25 +1,16 @@
 package com.example.budgetmanager;
 
-import java.awt.dnd.DropTarget;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/*
-TODO: Another format in Show all transactions!,
- create test for everything,
- ReadME
- Reflect all Errors and test handling i had
- Try to find more errors and go trough everything in the document for G and VG grade
- */
 public class CliApp {
-    private static final Logger log = BudgetLogger.getLogger();
+    private static final Logger LOG = BudgetLogger.getLogger();
     private final Path transactionPath = Path.of("transactions.txt");
     private final TransactionFile transactionFile = new TransactionFile();
 
@@ -30,7 +21,7 @@ public class CliApp {
     boolean running = true;
     void main (){
         BudgetLogger.init("BudgetPlaner.log");
-        log.info("Application started");
+        LOG.info("Application started");
         loadFromFile();
 
 while (running) {
@@ -70,7 +61,7 @@ while (running) {
     void exit () {
         saveToFile();
         running = false;
-        log.info("Application stopped.");
+        LOG.log(Level.INFO, "Application stopped.");
         IO.println("Goodbye!");
     }
 
@@ -79,7 +70,7 @@ while (running) {
     void addTransaction(){
 
         if (categories.findAll().isEmpty()) {
-            log.warning("Tried adding transaction without any category!");
+            LOG.log(Level.WARNING,"Tried adding transaction without any category!");
             IO.println("Please create a category first!");
             return;
         }
@@ -92,7 +83,7 @@ while (running) {
             case "INCOME" -> type =TransactionType.INCOME;
             case "EXPENSE" -> type = TransactionType.EXPENSE;
             default -> {
-                log.log(Level.WARNING, "Invalid transactionType ", incomeOrExpense);
+                LOG.log(Level.WARNING, "Invalid transactionType ", incomeOrExpense);
                 IO.println("Thats not an option!");
                 return;
             }
@@ -105,7 +96,7 @@ while (running) {
 
         Optional<String> category = findCategory(categoryInput);
             if (category.isEmpty()) {
-                log.log(Level.WARNING, "Unknown category: " + categoryInput);
+                LOG.log(Level.WARNING, "Unknown category: " + categoryInput);
                 IO.println("This category does not exist!");
                 return;
             }
@@ -121,11 +112,11 @@ while (running) {
             Transaction transaction = new Transaction(
                     LocalDate.now(), category.get(),name, amount, type);
             transactions.add(transaction);
-            log.log(Level.INFO, "Transaction has been added", transaction);
+            LOG.log(Level.INFO, "Transaction has been added", transaction);
             IO.println("Transaction has been added!");
 
         } catch (NumberFormatException | InvalidTransactionException e ) {
-            log.log(Level.WARNING, "Amount is not a number or has been rejected.");
+            LOG.log(Level.WARNING, "Amount is not a number or has been rejected.");
             IO.println("Invalid Transaction: " + e.getMessage());
         }
 
@@ -147,17 +138,17 @@ while (running) {
         category = formatCategory(category);
 
         if (category.isEmpty()|| category.contains(",")) {
-            log.log(Level.WARNING, "Rejected category name!");
+            LOG.log(Level.WARNING, "Rejected category name!");
             return false;
         }
 
         if (categories.findAll().contains(category)) {
-            log.log(Level.WARNING, "Category already exists!");
+            LOG.log(Level.WARNING, "Category already exists!");
             return false;
         }
 
         categories.add(category);
-        log.log(Level.INFO, "Category created!");
+        LOG.log(Level.INFO, "Category created!");
         return true;
     }
 
@@ -231,7 +222,7 @@ while (running) {
             try {
                 filter = filter.and(TransactionFilter.byType(TransactionType.valueOf(input.toUpperCase())));
             } catch (IllegalArgumentException e) {
-                log.log(Level.WARNING, "Couldn't Filter");
+                LOG.log(Level.WARNING, "Couldn't Filter");
                 IO.println("Thats not a possible answer");
                 return;
             }
@@ -246,10 +237,10 @@ while (running) {
     private void saveToFile(){
         try {
             transactionFile.saveTransactionInFile(transactions.findAll(), transactionPath);
-            log.info("File sucessfully saved!");
+            LOG.info("File sucessfully saved!");
             IO.println("Transaction saved successfully!");
         } catch (IOException e) {
-            log.log(Level.WARNING, "File had problems saving!");
+            LOG.log(Level.SEVERE, "File had problems saving!");
             IO.println("Could not safe transaction! " + e.getMessage());
         }
     }
@@ -267,9 +258,9 @@ while (running) {
             }
             IO.println("Loaded Transactions: " + loadedTransaction.size());
             IO.println("Transactions sucessfully reloaded!");
-            log.info("File loaded sucessfully!");
+            LOG.log(Level.INFO,"File loaded sucessfully!");
         }catch (IOException e ) {
-            log.log(Level.WARNING, "File could not load!");
+            LOG.log(Level.SEVERE, "File could not load!");
             IO.println("Transaction could not load!" + e.getMessage());
         }
 
@@ -296,10 +287,10 @@ while (running) {
 
         if (transactionToBeRemoved.isPresent()) {
             transactions.remove(transactionToBeRemoved.get());
-            log.log(Level.INFO, "Transaction removed: " + transactionToBeRemoved);
+            LOG.log(Level.INFO, "Transaction removed: " + transactionToBeRemoved);
             IO.println("Transaction sucessfully removed");
         } else{
-            log.log(Level.WARNING, "Transaction not found " + transactionToBeRemoved);
+            LOG.log(Level.WARNING, "Transaction not found " + transactionToBeRemoved);
             IO.println("Transaction not found!");
         }
 
@@ -307,7 +298,7 @@ while (running) {
 
     private void clearAll() {
         transactions.clear();
-        log.log(Level.INFO, "Transactions cleared");
+        LOG.log(Level.INFO, "Transactions cleared");
         IO.println("All transactions has been sucessfully cleared!");
     }
 

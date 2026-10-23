@@ -10,7 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class TransactionFile {
-    private static final Logger log = Logger.getLogger(TransactionFile.class.getName());
+    private static final Logger LOG = Logger.getLogger(TransactionFile.class.getName());
 
     public void saveTransactionInFile(List<Transaction> transactions, Path path)
             throws IOException {
@@ -60,10 +60,10 @@ try {
                 transactions.add(transaction);
 
             } catch (FileFormatException e) {
-                log.log(Level.WARNING, e.getMessage());
+                LOG.log(Level.WARNING, e.getMessage());
                 IO.println("Invalid transaction, line skipped");
             } catch (RuntimeException e) {
-                log.log(Level.WARNING, "Invalid transaction format" + e.getMessage());
+                LOG.log(Level.WARNING, "Invalid transaction format" + e.getMessage());
             }
         }
          return transactions;

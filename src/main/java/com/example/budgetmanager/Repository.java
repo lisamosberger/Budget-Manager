@@ -8,13 +8,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Repository <T> {
-    private static final Logger log = BudgetLogger.getLogger();
+    private static final Logger LOG = BudgetLogger.getLogger();
     private final List<T> items = new ArrayList<>();
 
     public void add(T item) {
         Objects.requireNonNull(item, "item must not be null");
         items.add(item);
-        log.log(Level.FINE,"Added Item");
+        LOG.log(Level.FINE,"Added Item");
     }
 
     public List<T> findAll() {
@@ -40,13 +40,13 @@ public class Repository <T> {
     }
 
     public boolean remove(T item) {
-        log.log(Level.FINE, "Item removed!");
+        LOG.log(Level.FINE, "Item removed!");
         return items.remove(item);
     }
 
     public void clear() {
         items.clear();
-        log.log(Level.FINE, "Repository cleared.");
+        LOG.log(Level.FINE, "Repository cleared.");
     }
 
 }

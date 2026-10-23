@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
 public class BudgetLogger {
-    private static final Logger logger = Logger.getLogger(BudgetLogger.class.getName());
+    private static final Logger LOG = Logger.getLogger(BudgetLogger.class.getName());
 
     public static void init (String Logfile) {
         try {
@@ -15,15 +15,15 @@ public class BudgetLogger {
 
             fileHandler.setFormatter(new SimpleFormatter());
             fileHandler.setLevel(Level.ALL);
-            logger.addHandler(fileHandler);
-            logger.setLevel(Level.ALL);
-            logger.setUseParentHandlers(false);
+            LOG.addHandler(fileHandler);
+            LOG.setLevel(Level.ALL);
+            LOG.setUseParentHandlers(false);
         } catch (IOException e) {
             IO.println("Could not logg" + e.getMessage());
         }
     }
 
     public static Logger getLogger() {
-        return logger;
+        return LOG;
     }
 }

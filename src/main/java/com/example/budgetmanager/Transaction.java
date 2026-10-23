@@ -15,6 +15,11 @@ public record Transaction(LocalDate date,
         if (category == null||category.isBlank()) {
             throw new InvalidTransactionException("Category cant be empty");
         }
+
+        if (name == null || name.isBlank()) {
+            throw new InvalidTransactionException("Name cant be empty");
+        }
+
         if (category.contains(",")){
             throw new InvalidTransactionException("Category can't contain commas");
         }
