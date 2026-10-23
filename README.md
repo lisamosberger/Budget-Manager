@@ -174,6 +174,12 @@ and when. In the end I understood that I is practical to use, but i completly fo
 that function in the begginning when I started the program. Now i know that 
 logging is something to set up in the beggining of a project.
 
+I used txt format for saving my files, which I realised in the end can 
+create some problems, for example if the user typed in , it would make reading a line not 
+possible because it used to split at ",". I now changed it to ";" because in the name value 
+can the user still use a comma. But I created a method so it doesn't crash the program when using 
+";", instead it gives a warning and sends the user back to the main menu.
+
 ## Limitations 
 - A new transaction in my program only gets todays date, this is possible to change. 
 - The filter in the menu only filters by type -> expense or income.

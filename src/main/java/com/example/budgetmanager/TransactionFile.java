@@ -17,10 +17,10 @@ public class TransactionFile {
         List<String> files = new ArrayList<>();
 
         for (Transaction transaction: transactions) {
-            String file = transaction.date() + ","
-                    + transaction.category() + ","
-                    + transaction.name() + ","
-                    + transaction.amount() + ","
+            String file = transaction.date() + ";"
+                    + transaction.category() + ";"
+                    + transaction.name() + ";"
+                    + transaction.amount() + ";"
                     + transaction.type();
             files.add(file);
         }
@@ -41,7 +41,7 @@ public class TransactionFile {
                 String file = files.get(i);
                 int lineNumber = i + 1;
 try {
-                String[] parts = file.split(",", -1);
+                String[] parts = file.split(";", -1);
                 if (parts.length != 5) {
                     throw new FileFormatException(lineNumber, "Expected 5 values");
                 }
@@ -61,9 +61,10 @@ try {
 
             } catch (FileFormatException e) {
                 LOG.log(Level.WARNING, e.getMessage());
-                IO.println("Invalid transaction, line skipped");
+                IO.println("Invalid transaction, line skipped!");
             } catch (RuntimeException e) {
                 LOG.log(Level.WARNING, "Invalid transaction format" + e.getMessage());
+                IO.println("Invalid transaction, line skipped!");
             }
         }
          return transactions;

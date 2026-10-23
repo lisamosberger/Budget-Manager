@@ -103,6 +103,11 @@ while (running) {
 
             String name = IO.readln("📝 Enter transaction name: ").trim();
 
+        if (name.isEmpty()|| name.contains(";") || name.contains(",")) {
+            LOG.log(Level.WARNING, "Rejected category name!");
+            IO.println("❌ This Format is not accepted!");
+        }
+
         String input = IO.readln("💵 Enter the amount (SEK): ");
 
         try {
@@ -139,7 +144,7 @@ while (running) {
 
         category = formatCategory(category);
 
-        if (category.isEmpty()|| category.contains(",")) {
+        if (category.isEmpty()|| category.contains(";") || category.contains(",")) {
             LOG.log(Level.WARNING, "Rejected category name!");
             return false;
         }

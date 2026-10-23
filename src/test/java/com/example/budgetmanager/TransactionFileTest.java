@@ -31,7 +31,7 @@ class TransactionFileTest {
         Path file = tempdir.resolve("transaction.txt");
         transactionFile.saveTransactionInFile(List.of(transaction), file);
         List<String> files = Files.readAllLines(file);
-        assertEquals("2026-05-10,Food,Cucumber,1500.0,EXPENSE", files.get(0));
+        assertEquals("2026-05-10;Food;Cucumber;1500.0;EXPENSE", files.get(0));
 
     }
 
@@ -56,8 +56,8 @@ class TransactionFileTest {
         List<String> files = Files.readAllLines(file);
 
         assertEquals(2, files.size());
-        assertEquals("2026-05-07,Food,Ice cream,15.0,EXPENSE", files.get(0));
-        assertEquals("2026-04-02,Food,Bread,14.0,EXPENSE", files.get(1));
+        assertEquals("2026-05-07;Food;Ice cream;15.0;EXPENSE", files.get(0));
+        assertEquals("2026-04-02;Food;Bread;14.0;EXPENSE", files.get(1));
     }
 
     @Test
@@ -65,10 +65,10 @@ class TransactionFileTest {
     void shouldSkipBrokenLines() throws IOException {
         Path file = tempdir.resolve("broken.txt");
         Files.write(file, List.of(
-            "2023-05-06,Food,Bread,15.0,EXPENSE",
+            "2023-05-06;Food;Bread;15.0;EXPENSE",
             "this is broken",
-                "not-a-date,Salary,Company,200,EXPENSE",
-            "2023-01-05,Salary,Company,100.0,INCOME"
+                "not-a-date;Salary;Company;200;EXPENSE",
+            "2023-01-05;Salary;Company;100.0;INCOME"
         ));
         List<Transaction> loaded =transactionFile.loadTransactions(file);
         assertEquals(2, loaded.size());

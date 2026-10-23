@@ -15,6 +15,12 @@ public record Transaction(LocalDate date,
         if (category == null||category.isBlank()) {
             throw new InvalidTransactionException("Category cant be empty");
         }
+        if (category.contains(";")) {
+            throw new InvalidTransactionException("Category can't contain ; !");
+        }
+        if (name.contains(";")) {
+            throw new InvalidTransactionException("Name can't contain ;!");
+        }
 
         if (name == null || name.isBlank()) {
             throw new InvalidTransactionException("Name cant be empty");
