@@ -82,4 +82,15 @@ class RepositoryTest {
         assertEquals(1, repository.findAll().size());
     }
 
+    @Test
+    @DisplayName("Should clear all transactions")
+    void shouldClearAllTransactions() {
+        repository.add(transaction);
+        repository.add(transaction2);
+
+        repository.clear();
+
+        assertEquals(0, repository.findAll().size());
+    }
+
 }
