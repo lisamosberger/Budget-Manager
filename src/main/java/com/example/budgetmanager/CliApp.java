@@ -278,7 +278,18 @@ while (running) {
 
         String name = IO.readln("Which transaction do you want to remove? ").trim();
 
+        Optional<Transaction> transactionToBeRemoved = transactions.findAll()
+                .stream().filter(t -> t.name().equalsIgnoreCase(name))
+                .findFirst();
 
+        if (transactionToBeRemoved.isPresent()) {
+            transactions.remove(transactionToBeRemoved.get());
+            log.log(Level.INFO, "Transaction removed: " + transactionToBeRemoved);
+            IO.println("Transaction sucessfully removed");
+        } else{
+            log.log(Level.WARNING, "Transaction not found " + transactionToBeRemoved);
+            IO.println("Transaction not found!");
+        }
 
     }
 
