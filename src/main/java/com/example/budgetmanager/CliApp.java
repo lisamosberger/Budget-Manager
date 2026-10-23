@@ -25,19 +25,19 @@ public class CliApp {
         loadFromFile();
 
 while (running) {
-    IO.println("\tBudget Planer" +
-            "\n=======================================" +
-            "\n1.  Add transaction" +
-            "\n2. Create category" +
-            "\n3. Show all transactions" +
-            "\n4. Show balance and summery by category" +
-            "\n5. Save to file" +
-            "\n6. Filter transactions " +
-            "\n7. Remove transaction by category " +
-            "\n8. Clear all transactions" +
-            "\ne. Exit ");
+    IO.println("\t💰~Budget Planer~💰" +
+            "\n===============================" +
+            "\n1. 💳 Add transaction" +
+            "\n2. ➕ Create category" +
+            "\n3. 🛍️ Show all transactions" +
+            "\n4. 📊 Show balance and summery by category" +
+            "\n5. 💾 Save to file" +
+            "\n6. 🔎 Filter transactions " +
+            "\n7. 🗑️ Remove transaction by category " +
+            "\n8. 🧹 Clear all transactions" +
+            "\ne. 👋 Exit ");
 
-    String input = IO.readln("Choose an option: ");
+    String input = IO.readln("👉 Choose an option: ");
     switch (input) {
         case "1" -> addTransaction();
         case "2" -> createCategory();
@@ -47,14 +47,14 @@ while (running) {
         case "6" -> filterTransactions();
         case "7" -> removeByCategory();
         case "8" -> clearAll();
-        case "e" -> exit();
-        default -> IO.println("Thats not an option!");
+        case "e","E" -> exit();
+        default -> IO.println("❌ Thats not an option!");
     }
 
     if(!running) {
         break;
     }
-    IO.readln("Press any key to contrinue...");
+    IO.readln("↩️ Press any key to contrinue...");
 }
     }
 
@@ -62,7 +62,7 @@ while (running) {
         saveToFile();
         running = false;
         LOG.log(Level.INFO, "Application stopped.");
-        IO.println("Goodbye!");
+        IO.println("👋 Goodbye! Thank you for using Budget Planer!");
     }
 
 
@@ -71,11 +71,11 @@ while (running) {
 
         if (categories.findAll().isEmpty()) {
             LOG.log(Level.WARNING,"Tried adding transaction without any category!");
-            IO.println("Please create a category first!");
+            IO.println("⚠️ Please create a category first!");
             return;
         }
 
-        String incomeOrExpense = IO.readln("Income or Expense? ");
+        String incomeOrExpense = IO.readln("Income📈 or Expense📉? ");
 
         TransactionType type;
 
@@ -84,26 +84,26 @@ while (running) {
             case "EXPENSE" -> type = TransactionType.EXPENSE;
             default -> {
                 LOG.log(Level.WARNING, "Invalid transactionType ", incomeOrExpense);
-                IO.println("Thats not an option!");
+                IO.println("❌ Thats not an option!");
                 return;
             }
         }
-        IO.println("Choose a Category " +
+        IO.println("📂 Choose a Category " +
                 "\n=======================================");
         categories.findAll().forEach(IO::println);
 
-        String categoryInput = IO.readln("Enter Category: ").trim();
+        String categoryInput = IO.readln("🏷️ Enter Category: ").trim();
 
         Optional<String> category = findCategory(categoryInput);
             if (category.isEmpty()) {
                 LOG.log(Level.WARNING, "Unknown category: " + categoryInput);
-                IO.println("This category does not exist!");
+                IO.println("❌ This category does not exist!");
                 return;
             }
 
-            String name = IO.readln("Enter transaction name: ").trim();
+            String name = IO.readln("📝 Enter transaction name: ").trim();
 
-        String input = IO.readln("Enter the amount (SEK): ");
+        String input = IO.readln("💵 Enter the amount (SEK): ");
 
         try {
             double amount = Double.parseDouble(
@@ -112,23 +112,25 @@ while (running) {
             Transaction transaction = new Transaction(
                     LocalDate.now(), category.get(),name, amount, type);
             transactions.add(transaction);
-            LOG.log(Level.INFO, "Transaction has been added", transaction);
+            LOG.log(Level.INFO, "✅ Transaction has been added", transaction);
             IO.println("Transaction has been added!");
 
         } catch (NumberFormatException | InvalidTransactionException e ) {
-            LOG.log(Level.WARNING, "Amount is not a number or has been rejected.");
-            IO.println("Invalid Transaction: " + e.getMessage());
+            LOG.log(Level.WARNING, "Amount is not a number or has been rejected."  + e.getMessage());
+            IO.println("❌ Invalid Transaction: ");
         }
 
     }
 
     void createCategory(){
+        IO.println("\t~CREATE CATEGORY~ " +
+                "\n=========================");
         String category = IO.readln("Enter new category: ");
 
         if (addCategory(category)) {
-            IO.println("Added the new category succesfully!");
+            IO.println("✅ Added the new category succesfully!");
         } else {
-            IO.println("The category can't be empty or already exists!");
+            IO.println("❌ The category can't be empty or already exists!");
         }
 
     }
@@ -158,15 +160,15 @@ while (running) {
     }
 
     void showAllTransactions(){
-        IO.println("Every Transaction made " +
-                "\n===================================");
+        IO.println("\t~ TRANSACTIONS ~ " +
+                "\n===========================");
         printTransactions(TransactionFilter.sortByDate(transactions.findAll()));
 
     }
 
     private void printTransactions(List<Transaction> list) {
         if (list.isEmpty()) {
-            IO.println("No transaction found");
+            IO.println("❌ No transaction found");
             return;
         }
 
@@ -179,36 +181,41 @@ while (running) {
             if (categoryTransactions.isEmpty())
                 continue;
 
-            IO.println("======" + category + "======");
+            IO.println("\t~" + category + "~"
+                    + "\n=====================");
 
             categoryTransactions.forEach(t -> IO.println(
-                            "Date: " + t.date()
-                            + "\nTransaction: " + t.name()
-                            + "\nAmount:" + t.amount() + " " +
-                            t.type()
-                            + "\n----------------------------------"));
+                            "📅 Date: " + t.date()
+                            + "\n📝 Transaction: " + t.name()
+                            + "\n💵 Amount:" + t.amount()
+                            + "\n↔️ Type: " + t.type()
+                            + "\n---------------------"));
 
         }
     }
 
     void showBalance(){
-      IO.println("======BUDGET SUMMARY=====" +
-              "\nCurrent balance: "
+      IO.println("\t~ BUDGET SUMMARY ~" +
+              "\n==============================" +
+              "\n💰 Current balance: "
               + budgetCalculator.calculateBalance(transactions)
               + " SEK.");
 
-      IO.println("=====INCOME===== " +
-              "\nTotal income: "
+      IO.println("\t ~ INCOME ~ "
+              + "\n==============================" +
+              "\n📈 Total income: "
               + budgetCalculator.calculateIncome(transactions)
               + " SEK." +
-              "\nIncome by category:");
+              "\n📂 Income by category:");
       budgetCalculator.sumByCategory(transactions, TransactionType.INCOME)
               .forEach((category, sum) -> IO.println(category + ": " + sum + "SEK"));
 
-      IO.println("=====EXPENSE===== \nTotal expense: " +
+      IO.println("\t ~EXPENSE ~ " +
+              "\n============================" +
+              "\n📉 Total expense: " +
               budgetCalculator.calculateExpense(transactions)
               + " SEK." + "" +
-              "\nExpense by category:");
+              "\n📂 Expense by category:");
       budgetCalculator.sumByCategory(transactions, TransactionType.EXPENSE)
               .forEach((category, sum) -> IO.println(category + ": " + sum + "SEK"));
 
@@ -217,13 +224,13 @@ while (running) {
     private void filterTransactions () {
         Predicate<Transaction> filter= t ->true;
 
-        String input =IO.readln("Type(Income/Expense), enter for all: ").trim();
+        String input =IO.readln("🔎 Type(Income/Expense), enter for all: ").trim();
         if (!input.isEmpty()) {
             try {
                 filter = filter.and(TransactionFilter.byType(TransactionType.valueOf(input.toUpperCase())));
             } catch (IllegalArgumentException e) {
-                LOG.log(Level.WARNING, "Couldn't Filter");
-                IO.println("Thats not a possible answer");
+                LOG.log(Level.WARNING, "Couldn't Filter" + e.getMessage());
+                IO.println("❌ Invalid type");
                 return;
             }
         }
@@ -238,10 +245,10 @@ while (running) {
         try {
             transactionFile.saveTransactionInFile(transactions.findAll(), transactionPath);
             LOG.info("File sucessfully saved!");
-            IO.println("Transaction saved successfully!");
+            IO.println("💾 Transaction saved successfully!");
         } catch (IOException e) {
             LOG.log(Level.SEVERE, "File had problems saving!");
-            IO.println("Could not safe transaction! " + e.getMessage());
+            IO.println("❌ Could not safe transaction! " + e.getMessage());
         }
     }
 
@@ -256,12 +263,11 @@ while (running) {
                     categories.add(transaction.category());
                 }
             }
-            IO.println("Loaded Transactions: " + loadedTransaction.size());
-            IO.println("Transactions sucessfully reloaded!");
+            IO.println("🔃 Transactions sucessfully reloaded!");
             LOG.log(Level.INFO,"File loaded sucessfully!");
         }catch (IOException e ) {
             LOG.log(Level.SEVERE, "File could not load!");
-            IO.println("Transaction could not load!" + e.getMessage());
+            IO.println("❌ Transaction could not load!" + e.getMessage());
         }
 
     }
@@ -277,9 +283,11 @@ while (running) {
     }
 
     private void removeByCategory () {
+        IO.println("\t~ TRANSACTIONS ~ " +
+                "\n===============================");
         printTransactions(transactions.findAll());
 
-        String name = IO.readln("Which transaction do you want to remove? ").trim();
+        String name = IO.readln("🗑️ Which transaction do you want to remove? ").trim();
 
         Optional<Transaction> transactionToBeRemoved = transactions.findAll()
                 .stream().filter(t -> t.name().equalsIgnoreCase(name))
@@ -288,10 +296,10 @@ while (running) {
         if (transactionToBeRemoved.isPresent()) {
             transactions.remove(transactionToBeRemoved.get());
             LOG.log(Level.INFO, "Transaction removed: " + transactionToBeRemoved);
-            IO.println("Transaction sucessfully removed");
+            IO.println("✅ Transaction sucessfully removed");
         } else{
             LOG.log(Level.WARNING, "Transaction not found " + transactionToBeRemoved);
-            IO.println("Transaction not found!");
+            IO.println("❌ Transaction not found!");
         }
 
     }
