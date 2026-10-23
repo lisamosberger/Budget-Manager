@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 public record Transaction(LocalDate date,
                           String category,
+                          String name,
                           double amount,
                           TransactionType type) {
 

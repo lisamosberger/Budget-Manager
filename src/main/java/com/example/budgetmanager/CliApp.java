@@ -41,7 +41,9 @@ while (running) {
             "\n3. Show all transactions" +
             "\n4. Show balance and summery by category" +
             "\n5. Save to file" +
-            "\n6. Filter transactions" +
+            "\n6. Filter transactions " +
+            "\n7. Remove transaction by category " +
+            "\n8. Clear all transactions" +
             "\ne. Exit ");
 
     String input = IO.readln("Choose an option: ");
@@ -52,6 +54,8 @@ while (running) {
         case "4" -> showBalance();
         case "5" -> saveToFile();
         case "6" -> filterTransactions();
+        case "7" -> removeByCategory();
+        case "8" -> clearAll();
         case "e" -> exit();
         default -> IO.println("Thats not an option!");
     }
@@ -106,6 +110,8 @@ while (running) {
                 return;
             }
 
+            String name = IO.readln("Enter transaction name: ").trim();
+
         String input = IO.readln("Enter the amount (SEK): ");
 
         try {
@@ -113,7 +119,7 @@ while (running) {
                     input.replace(",", "."));
 
             Transaction transaction = new Transaction(
-                    LocalDate.now(), category.get(), amount, type);
+                    LocalDate.now(), category.get(),name, amount, type);
             transactions.add(transaction);
             log.log(Level.INFO, "Transaction has been added", transaction);
             IO.println("Transaction has been added!");
@@ -176,6 +182,7 @@ while (running) {
         list.forEach(t->IO.println(
                 "Date: " + t.date() +
                         "\nCategory: " + t.category()
+                        + "\nTransaction: " + t.name()
                         + "\nAmount:" + t.amount() + " " +
                         t.type()
                         + "\n----------------------------------" ));
@@ -264,6 +271,15 @@ while (running) {
         }
         return category.substring(0, 1). toUpperCase()
                 + category.substring(1);
+    }
+
+    private void removeByCategory () {
+        printTransactions(transactions.findAll());
+
+        String name = IO.readln("Which transaction do you want to remove? ").trim();
+
+
+
     }
 
 }

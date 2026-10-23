@@ -19,6 +19,7 @@ public class TransactionFile {
         for (Transaction transaction: transactions) {
             String file = transaction.date() + ","
                     + transaction.category() + ","
+                    + transaction.name() + ","
                     + transaction.amount() + ","
                     + transaction.type();
             files.add(file);
@@ -41,20 +42,21 @@ public class TransactionFile {
                 int lineNumber = i + 1;
 try {
                 String[] parts = file.split(",", -1);
-                if (parts.length != 4) {
-                    throw new FileFormatException(lineNumber, "Expected 4 values");
+                if (parts.length != 5) {
+                    throw new FileFormatException(lineNumber, "Expected 5 values");
                 }
                 LocalDate date = LocalDate.parse(parts[0]);
                 String category = parts[1];
-                double amount = Double.parseDouble(parts[2]);
-                TransactionType type = TransactionType.valueOf(parts[3]);
+                String name = parts[2];
+                double amount = Double.parseDouble(parts[3]);
+                TransactionType type = TransactionType.valueOf(parts[4]);
 
-                if (category.isBlank() || amount <= 0 || !Double.isFinite(amount)) {
+                if (category.isBlank() || name.isBlank() || amount <= 0 || !Double.isFinite(amount)) {
                     throw new FileFormatException(lineNumber, "Category is Empty");
                 }
 
 
-                Transaction transaction = new Transaction(date, category, amount, type);
+                Transaction transaction = new Transaction(date, category, name ,amount, type);
                 transactions.add(transaction);
 
             } catch (FileFormatException e) {
