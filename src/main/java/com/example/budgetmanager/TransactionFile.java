@@ -10,7 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class TransactionFile {
-    private static final Logger LOG = Logger.getLogger(TransactionFile.class.getName());
+    private static final Logger LOG = BudgetLogger.getLogger();
 
     public void saveTransactionInFile(List<Transaction> transactions, Path path)
             throws IOException {
