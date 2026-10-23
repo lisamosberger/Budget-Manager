@@ -15,11 +15,12 @@ class TransactionTest {
     void creatingFirstTransactionInRecord() {
         //Arrange
         String category = "Food";
+        String name = "Bread";
         double amount = 50.0;
         TransactionType type = TransactionType.EXPENSE;
 
         //Act
-        Transaction transaction = new Transaction(LocalDate.now(), category, amount, type);
+        Transaction transaction = new Transaction(LocalDate.now(), category, name, amount, type);
 
         //Assert
         assertEquals(LocalDate.now(), transaction.date());
@@ -35,7 +36,7 @@ class TransactionTest {
         LocalDate date = LocalDate.now();
 
         assertThrows(InvalidTransactionException.class, () -> new Transaction(
-                date, "Food", -5.0, TransactionType.EXPENSE
+                date, "Food", "Bread", -5.0, TransactionType.EXPENSE
         ));
     }
 
@@ -45,7 +46,7 @@ class TransactionTest {
             LocalDate date = null;
 
             assertThrows(InvalidTransactionException.class,
-                    () -> new Transaction(date, "Food", 5.0, TransactionType.EXPENSE));
+                    () -> new Transaction(date, "Food", "Bread", 5.0, TransactionType.EXPENSE));
         }
 
 }

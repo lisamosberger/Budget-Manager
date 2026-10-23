@@ -15,8 +15,16 @@ class TransactionFilterTest {
     @Test
     @DisplayName("Should filter by type")
     void shouldFilterByType() {
-        Transaction income = new Transaction(LocalDate.now(), "Salary", 15.0, TransactionType.INCOME);
-        Transaction expense = new Transaction(LocalDate.now(), "Food", 15.0, TransactionType.EXPENSE);
+        Transaction income = new Transaction(LocalDate.now(),
+                "Salary",
+                "Company"
+                ,15.0,
+                TransactionType.INCOME);
+        Transaction expense = new Transaction(LocalDate.now(),
+                "Food",
+                "Bread",
+                15.0,
+                TransactionType.EXPENSE);
 
         repository.add(income);
         repository.add(expense);
@@ -30,9 +38,21 @@ class TransactionFilterTest {
     @Test
     @DisplayName("Sort by amount")
     void shouldSortByAmount () {
-        Transaction low = new Transaction(LocalDate.now(), "Food", 1.0, TransactionType.EXPENSE);
-        Transaction highest = new Transaction(LocalDate.now(), "Animal", 15.0, TransactionType.EXPENSE);
-        Transaction middle = new Transaction(LocalDate.now(), "Salary", 5.0, TransactionType.EXPENSE);
+        Transaction low = new Transaction(LocalDate.now(),
+                "Food",
+                "Bread",
+                1.0,
+                TransactionType.EXPENSE);
+        Transaction highest = new Transaction(LocalDate.now(),
+                "Animal",
+                "Cat Food",
+                15.0,
+                TransactionType.EXPENSE);
+        Transaction middle = new Transaction(LocalDate.now(),
+                "Salary",
+                "Company",
+                5.0,
+                TransactionType.EXPENSE);
 
         List<Transaction> result = TransactionFilter.sortByAmount(List.of(low, highest, middle));
 
@@ -43,9 +63,9 @@ class TransactionFilterTest {
     @Test
     @DisplayName("Sorting should not change the order in repository")
     void sortingShouldNotChangeTheOrderInRepository() {
-        Transaction first = new Transaction(LocalDate.now(), "Food", 1.0, TransactionType.EXPENSE);
-        Transaction second = new Transaction(LocalDate.now(), "Animal", 15.0, TransactionType.EXPENSE);
-        Transaction third = new Transaction(LocalDate.now(), "Salary", 5.0, TransactionType.EXPENSE);
+        Transaction first = new Transaction(LocalDate.now(), "Food", "Bread", 1.0, TransactionType.EXPENSE);
+        Transaction second = new Transaction(LocalDate.now(), "Animal","Cat Food", 15.0, TransactionType.EXPENSE);
+        Transaction third = new Transaction(LocalDate.now(), "Salary", "Company",5.0, TransactionType.EXPENSE);
 
         repository.add(first);
         repository.add(second);

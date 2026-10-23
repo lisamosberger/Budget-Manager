@@ -18,9 +18,9 @@ class BudgetCalculatorTest {
     void ifAddingAnIncomeTotalIncomeShouldIncrease(){
 
         repository.add(new Transaction(LocalDate.of(2026,10,13),
-                "Salary", 2000.0, TransactionType.INCOME));
+                "Salary", "Comapny", 2000.0, TransactionType.INCOME));
         repository.add(new Transaction(LocalDate.of(2026,10,13),
-                "Presents", 300.0, TransactionType.INCOME));
+                "Presents", "Christmas", 300.0, TransactionType.INCOME));
         double result = calculator.calculateIncome(repository);
         assertEquals(2300, result);
     }
@@ -38,6 +38,7 @@ class BudgetCalculatorTest {
     void idAddingSomethingToExpenseTotalExpenseShouldIncrease (){
         repository.add(new Transaction (LocalDate.of(2026,10,13),
                 "Food",
+                "Salad",
                 1400.0,
                 TransactionType.EXPENSE));
 
@@ -58,10 +59,12 @@ class BudgetCalculatorTest {
     void IfAddingIncomeAndExpenseShouldGiveDifferenceBetweenThem(){
         repository.add(new Transaction (LocalDate.of(2026,10,13),
                 "Food",
+                "Bread",
                 1500.0,
                 TransactionType.EXPENSE));
         repository.add((new Transaction(LocalDate.of(2026,10,13),
                 "Income",
+                "Salary",
                 1800.0,
                 TransactionType.INCOME)));
         double result = calculator.calculateBalance(repository);
@@ -73,10 +76,12 @@ class BudgetCalculatorTest {
     void ifExpenseIsGreaterThanIncomeShouldReturnNegativeNumber(){
         repository.add(new Transaction(LocalDate.of(2026,10,13),
                 "Food",
+                "Bread",
                 1500.0,
                 TransactionType.EXPENSE));
         repository.add((new Transaction(LocalDate.of(2026,10,13),
                 "Salary",
+                "Company",
                 1200.0,
                 TransactionType.INCOME)));
         double result = calculator.calculateBalance(repository);
@@ -86,10 +91,10 @@ class BudgetCalculatorTest {
     @Test
     @DisplayName("sumByCategory groups and sums per category")
     void sumByCategoryGroupsAndSums() {
-        repository.add(new Transaction(LocalDate.now(), "Food", 100.0, TransactionType.EXPENSE));
-        repository.add(new Transaction( LocalDate.now(), "Food", 50.0, TransactionType.EXPENSE));
-        repository.add(new Transaction( LocalDate.now(), "Transport", 70.0, TransactionType.EXPENSE));
-        repository.add(new Transaction(LocalDate.now(), "Salary", 3000.0, TransactionType.INCOME));
+        repository.add(new Transaction(LocalDate.now(), "Food","Bread", 100.0, TransactionType.EXPENSE));
+        repository.add(new Transaction( LocalDate.now(), "Food","Salad", 50.0, TransactionType.EXPENSE));
+        repository.add(new Transaction( LocalDate.now(), "Transport","Car", 70.0, TransactionType.EXPENSE));
+        repository.add(new Transaction(LocalDate.now(), "Salary","Comany", 3000.0, TransactionType.INCOME));
 
         Map<String, Double> result = calculator.sumByCategory(repository, TransactionType.EXPENSE);
 

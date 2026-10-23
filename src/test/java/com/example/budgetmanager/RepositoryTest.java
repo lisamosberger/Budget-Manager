@@ -14,12 +14,14 @@ class RepositoryTest {
     Transaction transaction = new Transaction(
             LocalDate.now(),
             "Food",
+            "Bread",
             50.0,
             TransactionType.EXPENSE);
 
     Transaction transaction2 = new Transaction(
             LocalDate.now(),
             "Transport",
+            "Car",
             25.0,
             TransactionType.EXPENSE
     );

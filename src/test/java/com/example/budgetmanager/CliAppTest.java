@@ -67,6 +67,7 @@ class CliAppTest {
     void shouldStoreATransactionInTheRepository() {
         Transaction transaction = new Transaction(LocalDate.now(),
                 "Food",
+                "Cucumber",
                 50.0,
                 TransactionType.EXPENSE);
 
@@ -82,10 +83,16 @@ class CliAppTest {
     void shouldAddAmountsTogetherInSameCategory(){
 
         app.addCategory("Food");
-        Transaction firstTransaction = new Transaction(LocalDate.now(), "Food",
-                50.0, TransactionType.EXPENSE);
-        Transaction secondTransaction = new Transaction(LocalDate.now(), "Food",
-                50.0, TransactionType.EXPENSE);
+        Transaction firstTransaction = new Transaction(LocalDate.now(),
+                "Food",
+                "Cucumber",
+                50.0,
+                TransactionType.EXPENSE);
+        Transaction secondTransaction = new Transaction(LocalDate.now(),
+                "Food",
+                "Bread",
+                50.0,
+                TransactionType.EXPENSE);
 
         app.transactions.add(firstTransaction);
         app.transactions.add(secondTransaction);
