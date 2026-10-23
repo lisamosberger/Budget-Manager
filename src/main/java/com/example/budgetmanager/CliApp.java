@@ -179,13 +179,25 @@ while (running) {
             return;
         }
 
-        list.forEach(t->IO.println(
-                "Date: " + t.date() +
-                        "\nCategory: " + t.category()
-                        + "\nTransaction: " + t.name()
-                        + "\nAmount:" + t.amount() + " " +
-                        t.type()
-                        + "\n----------------------------------" ));
+
+        for (String category : categories.findAll()) {
+            List<Transaction> categoryTransactions = list.stream()
+                            .filter(t -> t.category().equalsIgnoreCase(category))
+                                    .toList();
+
+            if (categoryTransactions.isEmpty())
+                continue;
+
+            IO.println("======" + category + "======");
+
+            categoryTransactions.forEach(t -> IO.println(
+                            "Date: " + t.date()
+                            + "\nTransaction: " + t.name()
+                            + "\nAmount:" + t.amount() + " " +
+                            t.type()
+                            + "\n----------------------------------"));
+
+        }
     }
 
     void showBalance(){
@@ -291,6 +303,12 @@ while (running) {
             IO.println("Transaction not found!");
         }
 
+    }
+
+    private void clearAll() {
+        transactions.clear();
+        log.log(Level.INFO, "Transactions cleared");
+        IO.println("All transactions has been sucessfully cleared!");
     }
 
 }
