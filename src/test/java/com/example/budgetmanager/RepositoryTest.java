@@ -60,4 +60,26 @@ class RepositoryTest {
         assertEquals(List.of("Food"), names.findWhere(s -> s.startsWith("F")));
     }
 
+    @Test
+    @DisplayName("Should remove existing item")
+    void shouldRemoveExistingItem () {
+        repository.add(transaction);
+
+        boolean result = repository.remove(transaction);
+
+        assertTrue(result);
+        assertTrue(repository.findAll().isEmpty());
+    }
+
+    @Test
+    @DisplayName("Should not remove transaction that does not exist")
+    void shouldNotRemoveNonExistingTransaction() {
+        repository.add(transaction);
+
+        boolean result = repository.remove(transaction2);
+
+        assertFalse(result);
+        assertEquals(1, repository.findAll().size());
+    }
+
 }
